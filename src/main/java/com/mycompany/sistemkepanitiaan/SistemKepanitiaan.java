@@ -1,15 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.sistemkepanitiaan;
 
 import java.util.Scanner;
-/**
- *
- * @author ASUS
- */
+
 public class SistemKepanitiaan {
+    
     public static void cariPanitia(String nama, AnggotaPanitia[] daftar, int jumlah) {
         System.out.println("\n=== Hasil Pencarian Nama: \"" + nama + "\" ===");
         boolean ditemukan = false;
@@ -23,7 +17,6 @@ public class SistemKepanitiaan {
             System.out.println("Data panitia tidak ditemukan.");
         }
     }
-
     public static void cariPanitia(String divisi, AnggotaPanitia[] daftar, int jumlah, boolean isDivisi) {
         System.out.println("\n=== Hasil Pencarian Divisi: \"" + divisi + "\" ===");
         boolean ditemukan = false;
@@ -37,16 +30,10 @@ public class SistemKepanitiaan {
             System.out.println("Data panitia pada divisi tersebut tidak ditemukan.");
         }
     }
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         AnggotaPanitia[] daftarPanitia = new AnggotaPanitia[50]; 
         int jumlahPanitia = 0;
-
-        daftarPanitia[jumlahPanitia++] = new PanitiaInti("Ahmad Rizky", "2517051001", "BPH", "Ketua Pelaksana");
-        daftarPanitia[jumlahPanitia++] = new StafDivisi("Siti Nurhaliza", "2517051015", "Medinfo", "Desain Banner");
-        daftarPanitia[jumlahPanitia++] = new StafDivisi("Budi Santoso", "2517051030", "Humas", "Broadcast Jarkom");
-
         boolean isRunning = true;
 
         System.out.println("==================================================");
@@ -77,8 +64,8 @@ public class SistemKepanitiaan {
                         break;
                     }
 
-                    System.out.println("\n--- Pilih Subclass / Tipe Panitia ---");
-                    System.out.println("1. Panitia Inti (BPH)");
+                    System.out.println("\n--- Pilih Tipe Panitia ---");
+                    System.out.println("1. Panitia Inti");
                     System.out.println("2. Staf Divisi");
                     System.out.print("Pilihan (1/2): ");
                     int tipe = scanner.nextInt();
@@ -107,24 +94,21 @@ public class SistemKepanitiaan {
                 }
 
                 case 2 -> {
-                    System.out.println("\n===================================================================================================");
-                    System.out.println("                                      DAFTAR PANITIA EVENT                                         ");
-                    System.out.println("===================================================================================================");
+                    System.out.println(" --- DAFTAR PANITIA EVENT --- ");
+
                     if (jumlahPanitia == 0) {
-                        System.out.println("Belum ada data panitia.");
+                        System.out.println("Daftar panitia tidak tersedia."); 
                     } else {
                         for (int i = 0; i < jumlahPanitia; i++) {
                             System.out.print((i + 1) + ". ");
                             daftarPanitia[i].tampilkanInfo();
                         }
                     }
-                    System.out.println("===================================================================================================");
-                    System.out.println("Total Objek Panitia Dibuat (Static): " + AnggotaPanitia.getTotalPanitia());
-                    System.out.println("===================================================================================================");
+                   System.out.println("Total Panitia saat ini: " + AnggotaPanitia.getTotalPanitia());
                 }
 
                 case 3 -> {
-                    System.out.println("\n--- Menu Pencarian (Method Overloading) ---");
+                    System.out.println("\n--- Menu Pencarian ---");
                     System.out.println("1. Cari Berdasarkan Nama");
                     System.out.println("2. Cari Berdasarkan Divisi");
                     System.out.print("Pilihan (1/2): ");
