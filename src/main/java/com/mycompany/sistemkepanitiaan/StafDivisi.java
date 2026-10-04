@@ -34,4 +34,3 @@ public class StafDivisi extends AnggotaPanitia {
         System.out.printf("| Tugas  : %-15s |\n", this.tugasSpesifik);
     }
 }
-
