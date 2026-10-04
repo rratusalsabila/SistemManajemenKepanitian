@@ -13,23 +13,15 @@ public class PanitiaInti extends AnggotaPanitia {
 
     public PanitiaInti(String nama, String npm, String divisi, String jabatan) {
         super(nama, npm, divisi);
-        setJabatan(jabatan);
+        this.jabatan = jabatan;
     }
-
-    public String getJabatan() {
-        return jabatan;
-    }
-
-    public void setJabatan(String jabatan) {
-        if (jabatan != null && !jabatan.trim().isEmpty()) {
-            this.jabatan = jabatan;
-        } else {
-            this.jabatan = "Anggota Inti";
-        }
-    }
+    
     public void tampilkanInfo() {
-        System.out.print("[PANITIA INTI] ");
-        super.tampilkanInfo();
-        System.out.printf("| Jabatan: %-15s |\n", this.jabatan);
+        System.out.printf("[Panitia Inti]   Nama: %-18s | NPM: %-10s | Divisi: %-12s | Jabatan: %s\n", 
+            nama, npm, divisi, jabatan);
+    }
+
+    public void jalankanTugas() {
+        System.out.println("-> Tanggung Jawab Inti: Mengoordinasikan rangkaian acara dan mengambil keputusan strategis.");
     }
 }

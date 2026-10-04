@@ -1,7 +1,13 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.mycompany.sistemkepanitiaan;
-
-import java.util.Scanner;
-
+import java.util.Scanner; 
+/**
+ *
+ * @author ASUS
+ */
 public class SistemKepanitiaan {
     
     public static void cariPanitia(String nama, AnggotaPanitia[] daftar, int jumlah) {
@@ -17,6 +23,7 @@ public class SistemKepanitiaan {
             System.out.println("Data panitia tidak ditemukan.");
         }
     }
+
     public static void cariPanitia(String divisi, AnggotaPanitia[] daftar, int jumlah, boolean isDivisi) {
         System.out.println("\n=== Hasil Pencarian Divisi: \"" + divisi + "\" ===");
         boolean ditemukan = false;
@@ -30,6 +37,11 @@ public class SistemKepanitiaan {
             System.out.println("Data panitia pada divisi tersebut tidak ditemukan.");
         }
     }
+
+    public static void simulasiTugas(AnggotaPanitia panitia) {
+        panitia.jalankanTugas();
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         AnggotaPanitia[] daftarPanitia = new AnggotaPanitia[50]; 
@@ -67,7 +79,8 @@ public class SistemKepanitiaan {
                     System.out.println("\n--- Pilih Tipe Panitia ---");
                     System.out.println("1. Panitia Inti");
                     System.out.println("2. Staf Divisi");
-                    System.out.print("Pilihan (1/2): ");
+                    System.out.println("3. Volunter");
+                    System.out.print("Pilihan (1/2/3): ");
                     int tipe = scanner.nextInt();
                     scanner.nextLine();
 
@@ -88,13 +101,18 @@ public class SistemKepanitiaan {
                         String tugas = scanner.nextLine();
                         daftarPanitia[jumlahPanitia++] = new StafDivisi(nama, npm, divisi, tugas);
                         System.out.println("Sukses: Staf Divisi berhasil ditambahkan!");
+                    } else if (tipe == 3) {
+                        System.out.print("Masukkan Area Penugasan: ");
+                        String area = scanner.nextLine();
+                        daftarPanitia[jumlahPanitia++] = new Volunter(nama, npm, divisi, area);
+                        System.out.println("Sukses: Volunter berhasil ditambahkan!");
                     } else {
                         System.out.println("Pilihan tipe tidak valid.");
                     }
                 }
 
                 case 2 -> {
-                    System.out.println(" --- DAFTAR PANITIA EVENT --- ");
+                    System.out.println("\n--- DAFTAR PANITIA EVENT ---");
 
                     if (jumlahPanitia == 0) {
                         System.out.println("Daftar panitia tidak tersedia."); 
@@ -102,9 +120,10 @@ public class SistemKepanitiaan {
                         for (int i = 0; i < jumlahPanitia; i++) {
                             System.out.print((i + 1) + ". ");
                             daftarPanitia[i].tampilkanInfo();
+                            simulasiTugas(daftarPanitia[i]);
                         }
                     }
-                   System.out.println("Total Panitia saat ini: " + AnggotaPanitia.getTotalPanitia());
+                    System.out.println("Total Panitia saat ini: " + AnggotaPanitia.getTotalPanitia());
                 }
 
                 case 3 -> {
