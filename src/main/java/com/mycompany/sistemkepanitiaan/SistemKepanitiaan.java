@@ -13,28 +13,11 @@ import java.util.Scanner;
  */
 public class SistemKepanitiaan {
     
-    public static void cariPanitia(String nama, ArrayList<AnggotaPanitia> daftar) throws PanitiaTidakDitemukanException {
-        System.out.println("\n=== Hasil Pencarian Nama: \"" + nama + "\" ===");
-        boolean ditemukan = false;
-        for (int i = 0; i < daftar.size(); i++) {
-            if (daftar.get(i).getNama().equalsIgnoreCase(nama)) {
-                daftar.get(i).tampilkanInfo(); 
-                ditemukan = true;
-            }
-        }
-        if (!ditemukan) {
-            throw new PanitiaTidakDitemukanException("Gagal: Panitia dengan nama \"" + nama + "\" tidak ditemukan di sistem.");
-        }
-    }
-
-    public static void simulasiTugas(AnggotaPanitia panitia) {
-        panitia.jalankanTugas();
-    }
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ArrayList<AnggotaPanitia> daftarPanitia = new ArrayList<>(); 
-        HashMap<String, String> dataLogistik = new HashMap<>();
+        PusatKepanitiaan perpusUnila = new PusatKepanitiaan("Sistem Kepanitiaan Event Unila");
+        perpusUnila.bukaPusatKepanitiaan();
+
         boolean isRunning = true;
 
         System.out.println("==================================================");
@@ -43,12 +26,13 @@ public class SistemKepanitiaan {
 
         while (isRunning) {
             System.out.println("\n--- MENU UTAMA ---");
-            System.out.println("1. Tambah Panitia Baru");
-            System.out.println("2. Tampilkan Seluruh Daftar Panitia");
-            System.out.println("3. Cari Panitia (Demo Custom Exception)");
-            System.out.println("4. Kelola Logistik (Demo HashMap)");
-            System.out.println("5. Keluar");
-            System.out.print("Pilih menu (1-5): ");
+            System.out.println("1. Tambah Panitia");
+            System.out.println("2. Lihat Daftar Panitia");
+            System.out.println("3. Cari Panitia");
+            System.out.println("4. Manajemen Anggota");
+            System.out.println("5. Peminjaman / Penugasan (Demo Association)");
+            System.out.println("6. Keluar");
+            System.out.print("Pilih Menu: 1-6: ");
 
             try {
                 if (!scanner.hasNextInt()) {
@@ -80,18 +64,15 @@ public class SistemKepanitiaan {
                         if (tipe == 1) {
                             System.out.print("Masukkan Jabatan: ");
                             String jabatan = scanner.nextLine();
-                            daftarPanitia.add(new PanitiaInti(nama, npm, divisi, jabatan));
-                            System.out.println("Sukses: Panitia Inti berhasil ditambahkan!");
+                            perpusUnila.tambahPanitia(new PanitiaInti(nama, npm, divisi, jabatan));
                         } else if (tipe == 2) {
                             System.out.print("Masukkan Tugas Spesifik: ");
                             String tugas = scanner.nextLine();
-                            daftarPanitia.add(new StafDivisi(nama, npm, divisi, tugas));
-                            System.out.println("Sukses: Staf Divisi berhasil ditambahkan!");
+                            perpusUnila.tambahPanitia(new StafDivisi(nama, npm, divisi, tugas));
                         } else if (tipe == 3) {
                             System.out.print("Masukkan Area Penugasan: ");
                             String area = scanner.nextLine();
-                            daftarPanitia.add(new Volunter(nama, npm, divisi, area));
-                            System.out.println("Sukses: Volunter berhasil ditambahkan!");
+                            perpusUnila.tambahPanitia(new Volunter(nama, npm, divisi, area));
                         } else {
                             System.out.println("Pilihan tipe tidak valid.");
                         }
@@ -99,90 +80,80 @@ public class SistemKepanitiaan {
 
                     case 2 -> {
                         System.out.println("\n--- DAFTAR PANITIA EVENT ---");
-
-                        if (daftarPanitia.isEmpty()) {
-                            System.out.println("Daftar panitia tidak tersedia."); 
-                        } else {
-                            for (int i = 0; i < daftarPanitia.size(); i++) {
-                                System.out.print((i + 1) + ". ");
-                                daftarPanitia.get(i).tampilkanInfo();
-                                simulasiTugas(daftarPanitia.get(i));
-                                daftarPanitia.get(i).hitungInsentif();
-
-                                if (daftarPanitia.get(i) instanceof DapatMemimpin) {
-                                    DapatMemimpin pimpinan = (DapatMemimpin) daftarPanitia.get(i);
-                                    pimpinan.koordinasiProgram();
-                                }
-                                if (daftarPanitia.get(i) instanceof DapatLaporan) {
-                                    DapatLaporan pelapor = (DapatLaporan) daftarPanitia.get(i);
-                                    pelapor.buatLaporan();
-                                }
-                                System.out.println();
-                            }
-                        }
-                        System.out.println("Total Panitia saat ini: " + AnggotaPanitia.getTotalPanitia());
+                        perpusUnila.lihatSemuaPanitia();
                     }
 
                     case 3 -> {
-                        System.out.println("\n--- FITUR CARI PANITIA ---");
-                        System.out.print("Masukkan Nama Panitia yang dicari: ");
-                        String namaCari = scanner.nextLine();
-                        
+                        System.out.println("\n--- Fitur Cari Panitia ---");
+                        System.out.print("Masukkan Nama: ");
+                        String kataKunci = scanner.nextLine();
                         try {
-                            cariPanitia(namaCari, daftarPanitia);
+                            perpusUnila.cariPanitia(kataKunci);
                         } catch (PanitiaTidakDitemukanException e) {
-                            System.out.println("PERINGATAN: " + e.getMessage());
-                        } finally {
-                            System.out.println("-> Sesi pencarian selesai dieksekusi.");
+                            System.out.println("Peringatan: " + e.getMessage());
                         }
                     }
 
                     case 4 -> {
-                        System.out.println("\n--- KELOLA LOGISTIK (HASHMAP) ---");
-                        System.out.println("1. Tambah Logistik Baru");
-                        System.out.println("2. Cari Logistik via Kode");
-                        System.out.println("3. Tampilkan Semua Logistik");
-                        System.out.print("Pilih (1-3): ");
-                        int menuLogistik = scanner.nextInt();
+                        System.out.println("\n--- Kelola Anggota ---");
+                        System.out.println("1. Tambah Anggota");
+                        System.out.println("2. Cari Anggota");
+                        System.out.println("3. Lihat Semua");
+                        System.out.print("Pilih: ");
+                        int menuA = scanner.nextInt();
                         scanner.nextLine();
 
-                        if (menuLogistik == 1) {
-                            System.out.print("Masukkan Kode Barang (Key): ");
-                            String kode = scanner.nextLine();
-                            System.out.print("Masukkan Nama Barang (Value): ");
-                            String barang = scanner.nextLine();
-                            dataLogistik.put(kode, barang);
-                            System.out.println("Sukses: Logistik berhasil ditambahkan!");
-                        } else if (menuLogistik == 2) {
-                            System.out.print("Masukkan Kode Barang yang dicari: ");
-                            String cariKode = scanner.nextLine();
-                            if (dataLogistik.containsKey(cariKode)) {
-                                System.out.println("Ditemukan! Nama Barang: " + dataLogistik.get(cariKode));
-                            } else {
-                                System.out.println("Barang dengan kode tersebut tidak terdaftar.");
-                            }
-                        } else if (menuLogistik == 3) {
-                            System.out.println("Total Jenis Logistik: " + dataLogistik.size());
-                            for (String key : dataLogistik.keySet()) {
-                                System.out.println("- Kode: " + key + " | Barang: " + dataLogistik.get(key));
-                            }
-                        } else {
-                            System.out.println("Pilihan tidak valid.");
+                        if (menuA == 1) {
+                            System.out.print("Masukkan NPM: ");
+                            String npm = scanner.nextLine();
+                            System.out.print("Masukkan Nama: ");
+                            String nama = scanner.nextLine();
+                            perpusUnila.tambahAnggota(new Anggota(npm, nama));
+                        } else if (menuA == 2) {
+                            System.out.print("NPM yg dicari: ");
+                            perpusUnila.cariAnggota(scanner.nextLine());
+                        } else if (menuA == 3) {
+                            perpusUnila.lihatSemuaAnggota();
                         }
                     }
 
                     case 5 -> {
-                        System.out.println("\nProgram selesai. Terima kasih!");
+                        System.out.println("\n--- Sistem Penugasan (Asosiasi) ---");
+                        System.out.print("Masukkan NPM Peminjam / Anggota: ");
+                        String inputNpm = scanner.nextLine();
+                        Anggota peminjam = perpusUnila.getAnggota(inputNpm);
+
+                        if (peminjam == null) {
+                            System.out.println("Gagal: Anggota belum terdaftar!");
+                        } else if (perpusUnila.getJumlahPanitia() == 0) {
+                            System.out.println("Gagal: Belum ada panitia yang bisa dikoordinasikan.");
+                        } else {
+                            perpusUnila.lihatSemuaPanitia();
+                            System.out.print("Pilih Nomor Panitia yang ingin dikoordinasikan: ");
+                            int noPanitia = scanner.nextInt() - 1;
+                            scanner.nextLine();
+
+                            if (noPanitia >= 0 && noPanitia < perpusUnila.getJumlahPanitia()) {
+                                AnggotaPanitia itemPanitia = perpusUnila.getPanitiaInt(noPanitia);
+                                TransaksiPenugasan.prosesTugas(peminjam, itemPanitia);
+                            } else {
+                                System.out.println("Nomor panitia tidak valid!");
+                            }
+                        }
+                    }
+
+                    case 6 -> {
+                        System.out.println("Terima kasih telah menggunakan Sistem Manajemen Kepanitiaan!");
                         isRunning = false;
                     }
 
-                    default -> System.out.println("Pilihan menu tidak valid.");
+                    default -> System.out.println("Pilihan tidak valid.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("TERJADI KESALAHAN: Masukkan format angka yang valid!");
+                System.out.println("Input harus angka!");
                 scanner.nextLine();
             } catch (Exception e) {
-                System.out.println("TERJADI KESALAHAN SISTEM: " + e.getMessage());
+                System.out.println("Terjadi kesalahan: " + e.getMessage());
             }
         }
         scanner.close();
