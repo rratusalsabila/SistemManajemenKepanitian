@@ -3,20 +3,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.sistemkepanitiaan;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Scanner; 
+import java.util.Scanner;
 /**
  *
  * @author ASUS
  */
 public class SistemKepanitiaan {
-    
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         PusatKepanitiaan perpusUnila = new PusatKepanitiaan("Sistem Kepanitiaan Event Unila");
         perpusUnila.bukaPusatKepanitiaan();
+
+        perpusUnila.muatDataDariFile();
 
         boolean isRunning = true;
 
@@ -30,9 +30,10 @@ public class SistemKepanitiaan {
             System.out.println("2. Lihat Daftar Panitia");
             System.out.println("3. Cari Panitia");
             System.out.println("4. Manajemen Anggota");
-            System.out.println("5. Peminjaman / Penugasan (Demo Association)");
-            System.out.println("6. Keluar");
-            System.out.print("Pilih Menu: 1-6: ");
+            System.out.println("5. Penugasan (Demo Association)");
+            System.out.println("6. Baca File Log Penugasan (Demo File I/O Teks)");
+            System.out.println("7. Simpan & Keluar (Demo Serialization)");
+            System.out.print("Pilih Menu: 1-7: ");
 
             try {
                 if (!scanner.hasNextInt()) {
@@ -143,6 +144,12 @@ public class SistemKepanitiaan {
                     }
 
                     case 6 -> {
+                        perpusUnila.bacaLogPenugasan();
+                    }
+
+                    case 7 -> {
+                        System.out.println("Menyimpan data sesi ke penyimpanan...");
+                        perpusUnila.simpanDataKeFile();
                         System.out.println("Terima kasih telah menggunakan Sistem Manajemen Kepanitiaan!");
                         isRunning = false;
                     }

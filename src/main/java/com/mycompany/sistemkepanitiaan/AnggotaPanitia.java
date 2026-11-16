@@ -3,12 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.sistemkepanitiaan;
-
+import java.io.Serializable;
 /**
  *
  * @author ASUS
  */
-public abstract class AnggotaPanitia {
+public abstract class AnggotaPanitia implements Serializable {
+    private static final long serialVersionUID = 1L;
     protected String nama;
     protected String npm;
     protected String divisi;
@@ -40,6 +41,10 @@ public abstract class AnggotaPanitia {
         return totalPanitia;
     }
 
+    public static void setTotalPanitia(int total) {
+        totalPanitia = total;
+    }
+
     public void tampilkanInfo() {
         System.out.print("Nama: " + nama + " | NPM: " + npm + " | Divisi: " + divisi);
     }
@@ -49,5 +54,4 @@ public abstract class AnggotaPanitia {
     }
 
     public abstract void hitungInsentif();
-    
 }

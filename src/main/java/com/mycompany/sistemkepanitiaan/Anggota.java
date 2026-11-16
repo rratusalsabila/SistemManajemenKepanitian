@@ -3,12 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.sistemkepanitiaan;
-
+import java.io.Serializable;
 /**
  *
  * @author ASUS
  */
-public class Anggota {
+public class Anggota implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String npm;
     private String nama;
 
@@ -25,4 +26,3 @@ public class Anggota {
         return nama;
     }
 }
-
